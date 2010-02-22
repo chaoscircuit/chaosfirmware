@@ -65,6 +65,8 @@ void ADC_init(void) {
     // turn the ADC on
     EnableADC10();                             
 
+    ADC_led_pin = 0x0100;
+    
     // wait for the first conversion to complete 
     while ( ! mAD1GetIntFlag() );
 }
@@ -131,14 +133,14 @@ void __ISR(_ADC_VECTOR, ipl7) ADCHandler(void) {
     IFS1bits.AD1IF = 0;
 
     // pull up RB8 for testing
-    LATB = LATB | 0x0100;
+    LATB = LATB | ADC_led_pin;
 
     if ( SMP_MODE == SAMPLING ) {
         ADC_storeMostRecent();
     }
     
     // pull RB8 back down
-    LATB = LATB & ~0x0100;
+    LATB = LATB & ~ADC_led_pin;
 
 }
 

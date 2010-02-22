@@ -14,4 +14,6 @@ void ADC_init(void);
 void ADC_read(void);
 void ADC_storeMostRecent(void);
 
+unsigned int ADC_led_pin;
+
 #endif

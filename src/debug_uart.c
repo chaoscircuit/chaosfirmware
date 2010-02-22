@@ -9,6 +9,7 @@
 #include "mdac.h"
 #include "led.h"
 #include "chaos.h"
+#include "adc.h"
 
 #define COMMAND_SIZE 32
 const int BAUD_RATE = 115000;
@@ -74,6 +75,15 @@ static void ProcessCommand(char* str) {
     } else if(strncmp(str, "ledchaos", 8) == 0) {
     // Toggles the chaos LED
         mChaosLED_Toggle();
+    } else if(strncmp(str, "adcon", 5) == 0) {
+    // Enables the ADC.
+        ADC_init();
+    } else if(strncmp(str, "adcoff", 6) == 0) {
+    // Disables the ADC.
+        CloseADC10();
+    } else if(strncmp(str, "samplepin", 9) == 0) {
+    // Enables/disables the toggling of the sampling indicator pin.
+        ADC_led_pin ^= 0x0100;
     }
 }
 
@@ -85,13 +95,20 @@ static void PrintHelp() {
     DBG_WriteString("\thelp\t\t-Prints this message.\r\n");
     DBG_WriteString("\tmdac #\t\t-Changes the value of the mdac to a specified number.\r\n");
     DBG_WriteString("\treset\t\t-Resets the Chaos Unit.\r\n");
-    DBG_WriteString("\tledtest\t\t-Flashes the LEDs.\r\n");
+    
     DBG_WriteString("\tchaoson\t\t-Powers on the Chaos circuitry.\r\n");
     DBG_WriteString("\tchaosoff\t-Powers down the Chaos circuitry.\r\n");
+    
     DBG_WriteString("\tencen\t\t-Enables the encoder.\r\n");
     DBG_WriteString("\tencdis\t\t-Disables the encoder.\r\n");
-    DBG_WriteString("\tledchaos\t-Toggles the chaos led.\r\n");
     
+    DBG_WriteString("\tledchaos\t-Toggles the chaos led.\r\n");
+    DBG_WriteString("\tledtest\t\t-Flashes the LEDs.\r\n");
+    
+    DBG_WriteString("\tadcon\t\t-Enables the ADC.\r\n");
+    DBG_WriteString("\tadcoff\t\t-Disables the ADC.\r\n");
+    
+    DBG_WriteString("\tsamplepin\t-Toggles the sample indicator pin.\r\n");
 }
 
 // UART 1 interrupt handler
