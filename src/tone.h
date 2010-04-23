@@ -9,8 +9,8 @@
 #include <plib.h>
 #include "globals.h"
 
-#define TONE_PORT   IOPORT_B
-#define TONE_PIN    BIT_9
+#define TONE_PORT   IOPORT_D
+#define TONE_PIN    BIT_4
 #define TMR1_TOGGLES_PER_SEC 100000
 #define TEMPO_MULTIPLER 1
 

@@ -45,10 +45,6 @@ void __ISR(_TIMER_2_VECTOR, ipl6) Timer2Handler(void) {
         SMP_gotoDemonstrationMode();
     }
     
-    if(TMR2_ticks % 500 == 0) {
-        mHeartbeat_LED_Toggle();
-    }
-    
     if(TONE_play == TRUE) {
         if(note_stop == -1) {
             note_stop = TMR2_ticks + TONE_beats[note_count]*TEMPO_MULTIPLER;

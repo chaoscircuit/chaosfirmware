@@ -74,7 +74,7 @@ static void ProcessCommand(char* str) {
         ENC_intDisable();
     } else if(strncmp(str, "ledchaos", 8) == 0) {
     // Toggles the chaos LED
-        mChaosLED_Toggle();
+        // mChaosLED_Toggle();
     } else if(strncmp(str, "adcon", 5) == 0) {
     // Enables the ADC.
         ADC_init();

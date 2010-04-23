@@ -8,10 +8,12 @@
 #include "mdac.h"
 #include "tone.h"
 // Be sure to change the read bits in the ISR if changing these values
-#define ENCA BIT_4
-#define ENCB BIT_5
-#define ENCSWITCH BIT_15
-#define CN_ENABLE (CN12_ENABLE | CN17_ENABLE | CN18_ENABLE)
+#define ENCA BIT_13
+#define ENCB BIT_14
+#define ENCSWITCH BIT_5
+#define CN_ENABLE (CN0_ENABLE | CN1_ENABLE | CN18_ENABLE)
+#define SWITCH_PORT IOPORT_F
+#define SPIN_PORT IOPORT_C
 
 /* Uncomment one of the following STEP_CALCULATIONS to determine how the encoder responds */
 #define DISCRETE_STEP_CALCULATIONS
@@ -43,10 +45,10 @@ void ENC_init() {
     lastSwitchState = UP;
     // set up the on change interupt
 
-    PORTSetPinsDigitalIn(IOPORT_B, ENCSWITCH);
-    PORTSetPinsDigitalIn(IOPORT_F, ENCA | ENCB);
-    mCNOpen(CN_ON | CN_IDLE_CON, CN_ENABLE, CN12_PULLUP_ENABLE);    
-    mPORTBRead();
+    PORTSetPinsDigitalIn(SWITCH_PORT, ENCSWITCH);
+    PORTSetPinsDigitalIn(SPIN_PORT, ENCA | ENCB);
+    mCNOpen(CN_ON | CN_IDLE_CON, CN_ENABLE, CN18_PULLUP_ENABLE);    
+    mPORTCRead();
     mPORTFRead();
     ConfigIntCN(CHANGE_INT_ON | CHANGE_INT_PRI_5);
     INTEnableSystemMultiVectoredInt();
@@ -57,8 +59,8 @@ void ENC_intEnable() {
     /**
      * Enable the encoder interrupts
      */
-    EnableCN12;
-    EnableCN17;
+    EnableCN1;
+    EnableCN0;
     EnableCN18;
 }
 
@@ -66,8 +68,8 @@ void ENC_intDisable() {
     /**
      * Disable the encoder interrupts
      */
-    DisableCN12;
-    DisableCN17;
+    DisableCN1;
+    DisableCN0;
     DisableCN18;
 }
 
@@ -89,10 +91,10 @@ void __ISR(_CHANGE_NOTICE_VECTOR, ipl5) ChangeNoticeHandler(void) {
     
     // Read PORTF and PORTB to clear CN mismatch condition
     mPORTFRead();
-    mPORTBRead();
+    mPORTCRead();
     
     // Check if encoder was pressed in
-    byte switchState = PORTReadBits(IOPORT_B, BIT_15) >> 15;
+    byte switchState = PORTReadBits(SWITCH_PORT, ENCSWITCH) >> 5;
     if(switchState != lastSwitchState) {
         if(switchState == UP) {
             if(MDAC_value == 1985) {
@@ -108,9 +110,10 @@ void __ISR(_CHANGE_NOTICE_VECTOR, ipl5) ChangeNoticeHandler(void) {
         
     lastValue = currentValue;
     
-    // Since we are reading bits 4 and 5 we shift to get the grey code
-    currentValue = PORTReadBits(IOPORT_F, ENCA | ENCB);
-    currentValue = currentValue >> 4;
+    // Since we are reading bits 13 & 14 we shift to get the grey code
+    currentValue = PORTReadBits(SPIN_PORT, ENCA | ENCB);
+    DBG_WriteInt(currentValue);
+    currentValue = currentValue >> 13;
     
     
     // Calculate what size step to take.
