@@ -40,6 +40,7 @@ void ENC_init() {
     /**
      * Initialize the encoder
      */
+     
     //Set up encoder counter
     ENC_elapsed = 0;
     lastSwitchState = UP;
@@ -111,10 +112,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, ipl5) ChangeNoticeHandler(void) {
     lastValue = currentValue;
     
     // Since we are reading bits 13 & 14 we shift to get the grey code
-    currentValue = PORTReadBits(SPIN_PORT, ENCA | ENCB);
-    DBG_WriteInt(currentValue);
-    currentValue = currentValue >> 13;
-    
+    currentValue = PORTReadBits(SPIN_PORT, ENCA | ENCB) >> 13;
     
     // Calculate what size step to take.
     #ifdef DISCRETE_STEP_CALCULATIONS
