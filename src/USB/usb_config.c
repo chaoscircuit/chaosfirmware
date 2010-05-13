@@ -79,8 +79,8 @@ USB_DEVICE_DESCRIPTOR dev_desc =
     0x00,                           // Subclass code
     0x00,                           // Protocol code
     USB_DEV_EP0_MAX_PACKET_SIZE,    // Max packet size for EP0, see usbcfg.h
-    0x0945,                         // Vendor ID
-    0x7777,                         // Product ID: PICDEM FS USB (DEMO Mode)
+    0x04D8,                         // Vendor ID
+    0xFC47,                         // Product ID
     0x0000,                         // Device release number in BCD format
     0x01,                           // Manufacturer string index
     0x02,                           // Product string index
