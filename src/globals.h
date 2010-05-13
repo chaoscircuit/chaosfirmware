@@ -6,7 +6,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#define VERSION 1002
+#define VERSION 2002
 
 #include <GenericTypeDefs.h>
 #include <peripheral/int.h>
