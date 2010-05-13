@@ -9,11 +9,11 @@ void CHAOS_init() {
     /**
      * Initialize the chaos circuit
      */
-    // sets the port direction
-    CHAOS_PORT_DIR = CHAOS_PORT_DIR & ~CHAOS_PIN;
+	// sets the port direction
+	TRISE = TRISE & ~0x10;
 
-    // makes sure it is off
-    CHAOS_PORT = CHAOS_PORT & ~CHAOS_PIN;
+	// makes sure it is off
+    LATE = LATE & ~0x10;
     
     // turn on the chaos circuit
     CHAOS_turnOn();
@@ -23,12 +23,14 @@ void CHAOS_turnOn() {
     /**
      * Turn on the chaos circuit
      */
-    CHAOS_PORT = CHAOS_PORT | CHAOS_PIN;
+    LATE = LATE | 0x10;
+    mChaos_LED_Off();
 }
 
 void CHAOS_turnOff() {
     /**
      * Turn off the chaos circuit
      */
-    CHAOS_PORT = CHAOS_PORT & ~CHAOS_PIN;
+    LATE = LATE & ~0x10;
+    mChaos_LED_On();
 }
